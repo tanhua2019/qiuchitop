@@ -39,10 +39,16 @@ export function getAll() {
     })
 }
 
-
-export function getarticle(query) {
+//获取详情
+export function getDetail(id) {
+  return request({
+      url: `/api/getarticlebyid?id=${id}`,
+      method: 'get',
+  })
+}
+export function getarticle() {
     return request({
-        url: `/api/getallarticle?c=${query}`,
+        url: '/api/getmyarticle',
         method: 'get',
     })
 }

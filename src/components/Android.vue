@@ -5,8 +5,10 @@
         <div class="category_name">
           <span>来自标签{{item.category_name}}</span>
         </div>
-        <div class="title">{{item.title}}</div>
-        <span v-bind:id="itemId" class="content_text">{{item.content}}</span>
+        <div class="title" @click="goDetail(item.id)">{{item.title}}</div>
+        <div class="content_text">
+          <p>{{item.content}}</p>
+        </div>
       </div>
       <div class="info">
         <div class="iconfont_box">
@@ -22,31 +24,40 @@
 </template>
 
 <script>
-import { getAll } from "../api";
+import {artical} from '../api'
 export default {
-  name: "",
-  data() {
-    return {
-      itemId: "",
-      articalTable: []
-    };
+  name:'',
+  data(){
+   return {
+     a: '',
+     articalTable: [],
+   }
   },
   created() {
-    this.getAll();
+    this.a = this.$route.query.category
+    this.artical();
   },
   methods: {
-    getAll() {
-      getAll().then(res => {
+    artical() {
+      artical(this.a).then(res => {
         console.log(res);
         if (res.data.code == 200) {
           this.articalTable = res.data.data;
-          this.itemId = res.data.data.id;
           console.log(this.articalTable);
         }
+      })
+    },
+    goDetail(id) {
+      const { href } = this.$router.resolve({
+        name: "Detail",
+        query: {
+          id: id
+        }
       });
-    }
-  }
-};
+      window.open(href, "_self");
+    },
+  },
+}
 </script>
 
 <style lang='less' scoped>
@@ -66,15 +77,25 @@ export default {
       }
 
       .title {
-        margin-bottom: 16px;
         color: #000;
         font-size: 22px;
+        cursor: pointer;
+        &:hover {
+          color: red;
+        }
       }
 
       .content_text {
-        display: block;
-        margin-bottom: 14px;
-        color: #9e9e9e;
+        display: flex;
+        align-items: center;
+        height:60px;
+        p {
+          display: block;
+          width: 600px;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow:ellipsis;
+        }
       }
     }
 
@@ -113,4 +134,5 @@ export default {
     }
   }
 }
+
 </style>

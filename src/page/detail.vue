@@ -4,30 +4,17 @@
       <div class="drag w">
         <el-card class="box-card">
           <div slot="header" class="clearfix">
-            <span>我的文章</span>
+            <span>文章详情</span>
             <el-button style="float: right; padding: 3px 0" type="text" @click="fanhui">返回首页</el-button>
           </div>
-          <!-- <div v-for="(item,index) in getarticleTable" :key="index" class="text item">
-            <dir>{{item.content}}</dir>
-          </div>-->
-          <dir v-for="(item,index) in getarticleTable" :key="index">
-            <div class="content">
-              <div class="category_name">
-                <span>来自标签{{item.category_name}}</span>
-              </div>
-              <div class="title">{{item.title}}</div>
-              <span  class="content_text">{{item.content}}</span>
-            </div>
-            <div class="info">
-              <div class="iconfont_box">
-                <span class="iconfont spanicon" id="icon">&#xe6a6;</span>
-              </div>
-              <span class="public_time">赞x2</span>
-              <span class="public_time">{{item.public_time}}</span>
-              <el-button style="float: right; padding: 3px 0" type="text" @click="edit">编辑</el-button>
-              <el-button style="float: right; padding: 3px 0" type="text" @click="delarticle(item.id)">删除</el-button>
-            </div>
-          </dir>
+          <div>
+            <div>分类：{{getarticleTable.category_name}}</div>
+            <div>内容：{{getarticleTable.content}}</div>
+            <div>创建事件：{{getarticleTable.public_time}}</div>
+            <div>阅读数量：{{getarticleTable.readtimes}}</div>
+            <div>标题：{{getarticleTable.title}}</div>
+            <div>用户名：{{getarticleTable.username}}</div>
+          </div>
         </el-card>
       </div>
     </div>
@@ -35,46 +22,27 @@
 </template>
 
 <script>
-import { getarticle } from "../api";
-import { delarticle } from "../api";
+import { getDetail } from '../api'
 export default {
-  name: "owncenter",
   data() {
     return {
-      getarticleTable: "",
-      a: ""
+      a: '',
+      getarticleTable: [],
     };
   },
   created() {
-    // this.a = this.$route.query.c;
-    this.getarticle();
+    this.a = this.$route.query.id
+    this.getDetail(this.a);
   },
   methods: {
-    getarticle() {
-      getarticle(this.a).then(res => {
+    getDetail(a) {
+      getDetail(a).then(res => {
         console.log(res);
         if (res.data.code == 200) {
           this.getarticleTable = res.data.data;
           console.log(this.getarticleTable,'90000');
-          console.log("getarticle");
         }
       });
-    },
-    delarticle(id) {
-      console.log(id);
-      delarticle(String(id)).then(res => {
-        console.log(res);
-        if (res.data.code == 200) {
-          this.$message({
-          message: '恭喜你，删除成功',
-          type: 'success'
-        });
-          this.getarticle();
-        }
-      })
-    },
-    edit () {
-         this.$router.push("/editor");
     },
     fanhui () {
          this.$router.push("/home");

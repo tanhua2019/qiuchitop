@@ -78,7 +78,13 @@ let router = new Router({
             name: 'Register',
             component: () =>
                 import ('@/page/register')
-        }
+        },
+        {
+          path: '/detail',
+          name: 'Detail',
+          component: () =>
+              import ('@/page/detail')
+      }
     ]
 })
 
